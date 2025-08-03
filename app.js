@@ -26,7 +26,7 @@ app.get("/tasks/:id", (req, res) => {
 app.post("/tasks", (req, res) => {
   const payload = req.body;
   const { title, description, completed } = payload;
- if (
+  if (
     typeof title !== "string" ||
     typeof description !== "string" ||
     typeof completed !== "boolean"
@@ -35,7 +35,7 @@ app.post("/tasks", (req, res) => {
   }
   const newTask = { id: tasks.length + 1, ...payload };
   tasks.push(newTask);
-  res.status(201).send(tasks);
+  res.status(201).send({ task: newTask, message: "Task created successfully" });
 });
 
 //Implement PUT /tasks/:id: Update an existing task by its ID.
@@ -44,7 +44,7 @@ app.put("/tasks/:id", (req, res) => {
   const payload = req.body;
   const { id } = req.params;
   const { title, description, completed } = payload;
-if (
+  if (
     typeof title !== "string" ||
     typeof description !== "string" ||
     typeof completed !== "boolean"
@@ -55,7 +55,6 @@ if (
   if (!task) {
     return res.status(404).send({ message: "Task not found" });
   }
-  task.id = Number(id);
   task.title = payload.title;
   task.completed = payload.completed;
   task.description = payload.description;
@@ -70,9 +69,8 @@ app.delete("/tasks/:id", (req, res) => {
     return res.status(404).send({ message: "Task not found" });
   }
   const index = tasks.indexOf(task);
-  console.log(task, index);
   tasks.splice(index, 1);
-  res.status(200).send(tasks);
+  res.status(200).send({ message: "Task Delete Successfully" });
 });
 
 app.listen(port, (err) => {
